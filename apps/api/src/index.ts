@@ -14,20 +14,21 @@ app.use("/uploads", express.static("uploads"))
 
 const storage = multer.diskStorage({
   destination: "uploads/",
-  filename: function(req, file, cb) { cb(null, uuid() + path.extname(file.originalname)) },
+  filename: (req, file, cb) => { cb(null, uuid() + path.extname(file.originalname)) },
 })
-const upload = multer({ storage: storage, limits: { fileSize: 10 * 1024 * 1024 } })
 
-app.post("/api/upload", upload.single("image"), function(req: any, res: any) {
+const upload = multer({ storage, limits: { fileSize: 10 * 1024 * 1024 } })
+
+app.post("/api/upload", upload.single("image"), (req, res) => {
   if (!req.file) return res.status(400).json({ error: "Nenhum arquivo enviado" })
   const url = (process.env.API_URL || "http://localhost:3001") + "/uploads/" + req.file.filename
-  res.json({ url: url })
+  res.json({ url })
 })
 
-app.get("/health", function(req: any, res: any) {
+app.get("/health", (req, res) => {
   res.json({ status: "ok", version: "1.0.0" })
 })
 
-app.listen(PORT, "0.0.0.0", function() {
+app.listen(PORT, "0.0.0.0", () => {
   console.log("VideoStudio API rodando na porta " + PORT)
 })
