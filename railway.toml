@@ -1,0 +1,4 @@
+[deploy]
+startCommand = "npm run start --workspace=apps/api"
+healthcheckPath = "/health"
+healthcheckTimeout = 300
