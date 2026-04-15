@@ -1,5 +1,4 @@
 process.stdout.write("[STARTUP] process started\n")
-
 import "dotenv/config"
 import express from "express"
 import cors from "cors"
@@ -28,6 +27,11 @@ app.post("/api/upload", upload.single("image"), (req: any, res: any) => {
 
 app.get("/health", (req: any, res: any) => res.json({ status: "ok", version: "1.0.0" }))
 
+// Sobe o servidor ANTES do bootstrap para o healthcheck passar
+app.listen(PORT, "0.0.0.0", () => {
+  process.stdout.write("VideoStudio API rodando na porta " + PORT + "\n")
+})
+
 async function bootstrap() {
   try {
     process.stdout.write("[STARTUP] Loading auth routes...\n")
@@ -37,17 +41,12 @@ async function bootstrap() {
     process.stdout.write("[STARTUP] Loading video routes...\n")
     const { default: videoRoutes } = await import("./routes/videos")
     process.stdout.write("[STARTUP] All routes loaded\n")
-
     app.use("/api/auth", authRoutes)
     app.use("/api/projects", projectRoutes)
     app.use("/api/videos", videoRoutes)
-
-    app.listen(PORT, "0.0.0.0", () => {
-      process.stdout.write("VideoStudio API rodando na porta " + PORT + "\n")
-    })
   } catch (err: any) {
     process.stderr.write("[FATAL] Bootstrap error: " + (err?.stack || err?.message || String(err)) + "\n")
-    process.exit(1)
+    // Não faz process.exit — servidor continua respondendo /health
   }
 }
 
