@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.27.0",
+    "@runwayml/sdk": "^1.0.0",
     "axios": "^1.7.2",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
@@ -16,7 +17,6 @@
     "express": "^4.19.2",
     "multer": "^1.4.5-lts.1",
     "mysql2": "^3.10.0",
-    "runwayml": "^0.4.0",
     "uuid": "^10.0.0",
     "zod": "^3.23.8"
   },

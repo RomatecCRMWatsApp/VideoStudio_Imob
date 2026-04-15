@@ -1,4 +1,4 @@
-﻿import RunwayML from 'runwayml'
+import RunwayML from '@runwayml/sdk'
 
 const client = new RunwayML({ apiKey: process.env.RUNWAY_API_KEY! })
 
