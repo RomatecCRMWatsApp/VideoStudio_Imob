@@ -6,7 +6,7 @@ import path from "path"
 import { v4 as uuid } from "uuid"
 
 const app = express()
-const PORT = process.env.PORT || 3001
+const PORT = parseInt(process.env.PORT || "3001", 10)
 
 app.use(cors({ origin: process.env.FRONTEND_URL || "http://localhost:5173" }))
 app.use(express.json({ limit: "50mb" }))
@@ -28,6 +28,6 @@ app.get("/health", function(req: any, res: any) {
   res.json({ status: "ok", version: "1.0.0" })
 })
 
-app.listen(PORT, function() {
+app.listen(PORT, "0.0.0.0", function() {
   console.log("VideoStudio API rodando na porta " + PORT)
 })
