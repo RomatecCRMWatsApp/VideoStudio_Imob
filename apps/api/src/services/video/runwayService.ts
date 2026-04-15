@@ -1,8 +1,7 @@
 import RunwayML from '@runwayml/sdk'
 
-const client = new RunwayML({ apiKey: process.env.RUNWAY_API_KEY! })
-
 export async function generateVideo(opts: { promptText: string; promptImage?: string; duration?: 5 | 10 }): Promise<string> {
+  const client = new RunwayML({ apiKey: process.env.RUNWAY_API_KEY! })
   const task = await client.imageToVideo.create({
     model: 'gen4_turbo',
     promptImage: opts.promptImage || '',
@@ -14,6 +13,7 @@ export async function generateVideo(opts: { promptText: string; promptImage?: st
 }
 
 export async function waitForCompletion(jobId: string, timeoutMs = 300000): Promise<string> {
+  const client = new RunwayML({ apiKey: process.env.RUNWAY_API_KEY! })
   const start = Date.now()
   while (Date.now() - start < timeoutMs) {
     const task = await client.tasks.retrieve(jobId)

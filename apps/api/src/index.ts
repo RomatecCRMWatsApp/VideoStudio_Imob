@@ -5,26 +5,30 @@ import multer from "multer"
 import path from "path"
 import { v4 as uuid } from "uuid"
 
+console.log("[STARTUP] Loading routes...")
+
 import authRoutes from "./routes/auth"
 import projectRoutes from "./routes/projects"
 import videoRoutes from "./routes/videos"
 
+console.log("[STARTUP] Routes loaded. Starting server...")
+
 const app = express()
 const PORT = parseInt(process.env.PORT || "3001", 10)
 
-app.use(cors({ origin: process.env.FRONTEND_URL || "http://localhost:5173" }))
+app.use(cors({ origin: process.env.FRONTEND_URL || "*" }))
 app.use(express.json({ limit: "50mb" }))
-app.use("/uploads", express.static("uploads"))
+app.use("/uploads", express.static(path.join(process.cwd(), "uploads")))
 
 const storage = multer.diskStorage({
-  destination: "uploads/",
+  destination: path.join(process.cwd(), "uploads"),
   filename: (req, file, cb) => cb(null, uuid() + path.extname(file.originalname)),
 })
 const upload = multer({ storage, limits: { fileSize: 10 * 1024 * 1024 } })
 
 app.post("/api/upload", upload.single("image"), (req: any, res: any) => {
   if (!req.file) return res.status(400).json({ error: "Nenhum arquivo enviado" })
-  const url = (process.env.API_URL || "http://localhost:3001") + "/uploads/" + req.file.filename
+  const url = (process.env.API_URL || "") + "/uploads/" + req.file.filename
   res.json({ url })
 })
 
@@ -36,4 +40,13 @@ app.use("/api/videos", videoRoutes)
 
 app.listen(PORT, "0.0.0.0", () => {
   console.log("VideoStudio API rodando na porta " + PORT)
+})
+
+process.on("uncaughtException", (err) => {
+  console.error("[FATAL] Uncaught exception:", err)
+  process.exit(1)
+})
+
+process.on("unhandledRejection", (reason) => {
+  console.error("[FATAL] Unhandled rejection:", reason)
 })
