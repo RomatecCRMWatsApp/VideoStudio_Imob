@@ -1,4 +1,4 @@
-﻿{
+{
   "name": "@videostudio/api",
   "version": "1.0.0",
   "private": true,
@@ -9,14 +9,11 @@
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.27.0",
-    "@trpc/server": "^10.45.2",
     "axios": "^1.7.2",
-    "bullmq": "^5.12.0",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "drizzle-orm": "^0.31.0",
     "express": "^4.19.2",
-    "ioredis": "^5.4.1",
     "multer": "^1.4.5-lts.1",
     "mysql2": "^3.10.0",
     "runwayml": "^0.4.0",
@@ -31,5 +28,8 @@
     "@types/uuid": "^10.0.0",
     "tsx": "^4.15.7",
     "typescript": "^5.4.5"
+  },
+  "engines": {
+    "node": ">=20.0.0"
   }
 }
