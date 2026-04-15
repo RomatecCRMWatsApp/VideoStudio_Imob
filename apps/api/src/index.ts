@@ -5,6 +5,10 @@ import multer from "multer"
 import path from "path"
 import { v4 as uuid } from "uuid"
 
+import authRoutes from "./routes/auth"
+import projectRoutes from "./routes/projects"
+import videoRoutes from "./routes/videos"
+
 const app = express()
 const PORT = parseInt(process.env.PORT || "3001", 10)
 
@@ -14,20 +18,22 @@ app.use("/uploads", express.static("uploads"))
 
 const storage = multer.diskStorage({
   destination: "uploads/",
-  filename: function(req, file, cb) { cb(null, uuid() + path.extname(file.originalname)) },
+  filename: (req, file, cb) => cb(null, uuid() + path.extname(file.originalname)),
 })
-const upload = multer({ storage: storage, limits: { fileSize: 10 * 1024 * 1024 } })
+const upload = multer({ storage, limits: { fileSize: 10 * 1024 * 1024 } })
 
-app.post("/api/upload", upload.single("image"), function(req: any, res: any) {
+app.post("/api/upload", upload.single("image"), (req: any, res: any) => {
   if (!req.file) return res.status(400).json({ error: "Nenhum arquivo enviado" })
   const url = (process.env.API_URL || "http://localhost:3001") + "/uploads/" + req.file.filename
-  res.json({ url: url })
+  res.json({ url })
 })
 
-app.get("/health", function(req: any, res: any) {
-  res.json({ status: "ok", version: "1.0.0" })
-})
+app.get("/health", (req: any, res: any) => res.json({ status: "ok", version: "1.0.0" }))
 
-app.listen(PORT, "0.0.0.0", function() {
+app.use("/api/auth", authRoutes)
+app.use("/api/projects", projectRoutes)
+app.use("/api/videos", videoRoutes)
+
+app.listen(PORT, "0.0.0.0", () => {
   console.log("VideoStudio API rodando na porta " + PORT)
 })
