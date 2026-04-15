@@ -1,4 +1,4 @@
 [deploy]
-startCommand = "npm run start --workspace=apps/api"
+startCommand = "npx tsx apps/api/src/index.ts"
 healthcheckPath = "/health"
 healthcheckTimeout = 300
