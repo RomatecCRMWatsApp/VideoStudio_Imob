@@ -4,7 +4,7 @@ export async function generateVideo(opts: { promptText: string; promptImage?: st
   const client = new RunwayML({ apiKey: process.env.RUNWAY_API_KEY! })
   const task = await client.imageToVideo.create({
     model: 'gen4_turbo',
-    promptImage: opts.promptImage || '',
+    ...(opts.promptImage ? { promptImage: opts.promptImage } : {}),
     promptText: opts.promptText,
     duration: opts.duration || 10,
     ratio: '16:9',
@@ -23,3 +23,4 @@ export async function waitForCompletion(jobId: string, timeoutMs = 300000): Prom
   }
   throw new Error('Runway timeout')
 }
+

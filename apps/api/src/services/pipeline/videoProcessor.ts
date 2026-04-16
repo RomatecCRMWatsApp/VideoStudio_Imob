@@ -9,8 +9,8 @@ import { v4 as uuid } from 'uuid'
 
 const activeJobs = new Set<string>()
 
-async function processScene(scene: typeof scenes.$inferSelect): Promise<string> {
-  const opts = { promptText: scene.prompt, duration: (scene.durationSecs || 10) as 5 | 10 }
+async function processScene(scene: typeof scenes.$inferSelect, sourceImageUrl?: string | null): Promise<string> {
+  const opts = { promptText: scene.prompt, duration: (scene.durationSecs || 10) as 5 | 10, promptImage: sourceImageUrl || undefined }
   switch (scene.engine) {
     case 'kling': {
       const jobId = await kling.generateVideo(opts)
@@ -73,7 +73,7 @@ export async function processVideo(videoId: string) {
 
       try {
         const [dbScene] = await db.select().from(scenes).where(eq(scenes.id, scene.id))
-        const outputUrl = await processScene(dbScene)
+        const outputUrl = await processScene(dbScene, video.sourceImageUrl)
         await db.update(scenes).set({ status: 'completed', outputUrl }).where(eq(scenes.id, scene.id))
       } catch (e: any) {
         await db.update(scenes).set({ status: 'failed' }).where(eq(scenes.id, scene.id))
@@ -100,3 +100,4 @@ export async function processVideo(videoId: string) {
     activeJobs.delete(videoId)
   }
 }
+
