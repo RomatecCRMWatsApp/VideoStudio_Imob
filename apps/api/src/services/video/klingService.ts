@@ -16,6 +16,7 @@ export async function generateVideo(opts: { promptText: string; promptImage?: st
       ...(opts.promptImage ? { image_url: opts.promptImage } : {}),
     },
   }, { headers: headers() })
+  .catch((e: any) => { throw new Error('Kling 400: ' + JSON.stringify(e.response?.data)) })
   const taskId = res.data.data?.task_id
   if (!taskId) throw new Error('Kling: task_id ausente. Resposta: ' + JSON.stringify(res.data))
   return taskId
@@ -32,5 +33,6 @@ export async function waitForCompletion(taskId: string, timeoutMs = 300000): Pro
   }
   throw new Error('Kling timeout')
 }
+
 
 
