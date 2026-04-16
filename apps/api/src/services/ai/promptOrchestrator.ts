@@ -9,7 +9,7 @@ export interface ProjectInput {
 }
 
 export async function generateScenePrompts(input: ProjectInput) {
-  const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY! })
+  const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY!, timeout: 60000, maxRetries: 0 })
 
   const userContent = `Generate 7 scene prompts for real estate construction video. Land: ${input.areaM2 ?? '?'}m2, Style: ${input.houseStyle ?? 'modern'}, Model: ${input.houseModel ?? 'standard'}. ${input.customInstructions ?? ''}
 
@@ -35,3 +35,4 @@ Return JSON: {"scenes":[{"order":1,"type":"terrain_delimitation","title":"Delimi
   const cleaned = block.text.replace(/^```json\s*/i, '').replace(/```\s*$/i, '').trim()
   return JSON.parse(cleaned).scenes
 }
+
