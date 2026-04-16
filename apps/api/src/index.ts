@@ -20,7 +20,7 @@ const storage = multer.diskStorage({
   destination: path.join(process.cwd(), "uploads"),
   filename: (req, file, cb) => cb(null, uuid() + path.extname(file.originalname)),
 })
-const upload = multer({ storage, limits: { fileSize: 10 * 1024 * 1024 } })
+const upload = multer({ storage, limits: { fileSize: 50 * 1024 * 1024 } })
 
 app.post("/api/upload", upload.single("image"), (req: any, res: any) => {
   if (!req.file) return res.status(400).json({ error: "Nenhum arquivo enviado" })
@@ -54,4 +54,5 @@ async function bootstrap() {
 }
 
 bootstrap()
+
 
