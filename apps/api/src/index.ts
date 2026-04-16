@@ -5,6 +5,9 @@ import cors from "cors"
 import multer from "multer"
 import path from "path"
 import { v4 as uuid } from "uuid"
+import fs from "fs"
+const uploadsDir = path.join(process.cwd(), "uploads")
+if (!fs.existsSync(uploadsDir)) fs.mkdirSync(uploadsDir, { recursive: true })
 
 const app = express()
 const PORT = parseInt(process.env.PORT || "3001", 10)
@@ -51,3 +54,4 @@ async function bootstrap() {
 }
 
 bootstrap()
+
