@@ -5,7 +5,7 @@ const headers = () => ({ 'X-API-Key': process.env.PIAPI_API_KEY!, 'Content-Type'
 
 export async function generateVideo(opts: { promptText: string; promptImage?: string; duration?: 5 | 10 }): Promise<string> {
   const res = await axios.post(`${BASE}/task`, {
-    model: 'kling-v1.6-pro',
+    model: 'kling-v1-5-pro',
     task_type: opts.promptImage ? 'image_to_video' : 'text_to_video',
     input: {
       prompt: opts.promptText,
@@ -33,6 +33,7 @@ export async function waitForCompletion(taskId: string, timeoutMs = 300000): Pro
   }
   throw new Error('Kling timeout')
 }
+
 
 
 
