@@ -7,7 +7,7 @@ export async function generateVideo(opts: { promptText: string; promptImage?: st
     ...(opts.promptImage ? { promptImage: opts.promptImage } : {}),
     promptText: opts.promptText,
     duration: opts.duration || 10,
-    ratio: '16:9',
+    ratio: '1280:720',
   })
   return task.id
 }
@@ -23,4 +23,5 @@ export async function waitForCompletion(jobId: string, timeoutMs = 300000): Prom
   }
   throw new Error('Runway timeout')
 }
+
 
