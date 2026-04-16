@@ -1,7 +1,4 @@
-[build]
-buildCommand = "npm install && npm run build"
-
 [deploy]
 startCommand = "npm run start"
 healthcheckPath = "/"
-healthcheckTimeout = 300
+healthcheckTimeout = 120
