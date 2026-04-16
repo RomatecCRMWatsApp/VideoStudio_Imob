@@ -76,6 +76,7 @@ export async function processVideo(videoId: string) {
         const outputUrl = await processScene(dbScene, video.sourceImageUrl)
         await db.update(scenes).set({ status: 'completed', outputUrl }).where(eq(scenes.id, scene.id))
       } catch (e: any) {
+        process.stderr.write('[SCENE ERROR] ' + scene.id + ' (' + scene.engine + '): ' + (e?.message || e) + '\n')
         await db.update(scenes).set({ status: 'failed' }).where(eq(scenes.id, scene.id))
       }
 
@@ -100,4 +101,5 @@ export async function processVideo(videoId: string) {
     activeJobs.delete(videoId)
   }
 }
+
 
