@@ -1,7 +1,4 @@
-﻿[build]
-installCommand = "npm install --workspace=apps/api && npm install"
-
 [deploy]
-startCommand = "npx tsx apps/api/src/index.ts"
+startCommand = "npm run start --workspace=apps/api"
 healthcheckPath = "/health"
 healthcheckTimeout = 300
